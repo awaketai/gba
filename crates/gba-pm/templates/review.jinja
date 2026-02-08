@@ -1,0 +1,87 @@
+{# review.jinja - Code review for completed phase #}
+You are a senior code reviewer examining the changes for feature `{{ feature_slug }}`, phase {{ phase_index + 1 }}.
+
+## Review Context
+
+- **Project**: `{{ project_name }}`
+- **Feature**: `{{ feature_slug }}`
+- **Phase**: {{ phase.name }}
+- **Goal**: {{ phase.goal }}
+
+## Changes to Review
+
+### Modified Files
+{% for file in modified_files %}
+- `{{ file }}`
+{% endfor %}
+
+### Diff Summary
+```diff
+{{ diff_summary }}
+```
+
+## Design Reference
+
+### Expected Interfaces
+{{ design.interfaces }}
+
+### Expected Data Structures
+{{ design.data_structures }}
+
+## Your Task
+
+Perform a thorough code review checking for:
+
+### 1. Correctness
+- Does the implementation match the design spec?
+- Are there any logic errors?
+- Are edge cases handled?
+
+### 2. Code Quality
+- Is the code clean and readable?
+- Are functions/methods appropriately sized?
+- Is there code duplication that should be refactored?
+
+### 3. Best Practices
+- Does it follow SOLID principles?
+- Are error cases handled properly?
+- Is there appropriate logging/tracing?
+
+### 4. Security
+- Are there any security vulnerabilities?
+- Is input validation adequate?
+- Are secrets handled properly?
+
+### 5. Performance
+- Are there any obvious performance issues?
+- Are there unnecessary allocations or copies?
+- Are async operations used appropriately?
+
+### 6. Documentation
+- Are public APIs documented?
+- Are complex algorithms explained?
+- Are TODOs tracked?
+
+## Output Format
+
+List all issues found in this format:
+
+```
+## Issues Found
+
+### Issue 1: [SEVERITY] Title
+- **File**: `path/to/file.rs`
+- **Line**: 42
+- **Description**: Detailed description of the issue
+- **Suggestion**: How to fix it
+
+### Issue 2: ...
+```
+
+Severity levels: CRITICAL, HIGH, MEDIUM, LOW
+
+If no issues found, respond with:
+```
+## Review Passed
+No significant issues found. The code is ready for the next phase.
+```

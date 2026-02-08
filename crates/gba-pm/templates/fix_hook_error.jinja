@@ -1,0 +1,76 @@
+{# fix_hook_error.jinja - Fix precommit hook errors #}
+You are fixing precommit hook failures for feature `{{ feature_slug }}`, phase {{ phase_index + 1 }}.
+
+## Hook Failure Details
+
+**Failed Hook**: `{{ hook_name }}`
+**Exit Code**: {{ exit_code }}
+
+### Error Output
+```
+{{ error_output }}
+```
+
+## Context
+
+- **Project**: `{{ project_name }}`
+- **Working Directory**: `{{ working_dir }}`
+- **Phase**: {{ phase.name }}
+
+## Recent Changes
+
+Files modified in this phase:
+{% for file in modified_files %}
+- `{{ file }}`
+{% endfor %}
+
+## Hook Type Information
+
+{% if hook_name == "build" %}
+This is a **build** failure. Common causes:
+- Syntax errors
+- Missing imports/dependencies
+- Type mismatches
+- Unresolved references
+{% elif hook_name == "fmt" %}
+This is a **formatting** failure. Common causes:
+- Code style violations
+- Incorrect indentation
+- Missing/extra whitespace
+{% elif hook_name == "lint" %}
+This is a **linting** failure. Common causes:
+- Unused variables/imports
+- Potential bugs (clippy warnings)
+- Code quality issues
+{% elif hook_name == "security_check" %}
+This is a **security** failure. Common causes:
+- Hardcoded secrets
+- Unsafe code patterns
+- Vulnerable dependencies
+{% endif %}
+
+## Your Task
+
+1. **Analyze** the error output carefully
+2. **Identify** the root cause(s)
+3. **Fix** all issues in the affected files
+4. **Verify** the fix resolves the hook failure
+
+## Guidelines
+
+- Fix the actual issue, not just suppress the warning
+- Make minimal changes needed to pass the hook
+- Don't introduce new issues while fixing
+- If multiple errors, fix them all
+
+## Attempt Information
+
+- **Attempt**: {{ attempt_number }} of {{ max_attempts }}
+{% if previous_fixes %}
+- **Previous fix attempts**:
+{% for fix in previous_fixes %}
+  - {{ fix }}
+{% endfor %}
+{% endif %}
+
+Fix the hook failure and ensure the code passes all checks.

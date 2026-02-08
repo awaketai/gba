@@ -1,0 +1,88 @@
+{# verification.jinja - Execute verification plan #}
+You are running the verification plan for feature `{{ feature_slug }}`.
+
+## Verification Plan
+
+### Test Cases
+
+#### Unit Tests
+{% for test in verification_plan.unit_tests %}
+- [ ] {{ test }}
+{% endfor %}
+
+#### Integration Tests
+{% for test in verification_plan.integration_tests %}
+- [ ] {{ test }}
+{% endfor %}
+
+### Acceptance Criteria
+{% for criterion in verification_plan.acceptance_criteria %}
+- [ ] {{ criterion }}
+{% endfor %}
+
+### Quality Checks
+{% for check in verification_plan.quality_checks %}
+- [ ] {{ check }}
+{% endfor %}
+
+## Context
+
+- **Project**: `{{ project_name }}`
+- **Working Directory**: `{{ working_dir }}`
+- **Feature**: `{{ feature_slug }}`
+
+## All Phases Completed
+{% for phase in completed_phases %}
+- ✓ Phase {{ loop.index }}: {{ phase.name }} (commit: `{{ phase.commit }}`)
+{% endfor %}
+
+## Your Task
+
+Execute the verification plan:
+
+### 1. Run Tests
+- Execute unit tests
+- Execute integration tests
+- Report any failures with details
+
+### 2. Check Acceptance Criteria
+- Verify each criterion is met
+- Provide evidence for each check
+
+### 3. Run Quality Checks
+- Check code coverage (threshold: {{ coverage_threshold }}%)
+- Verify no new lint warnings
+- Run security scans
+- Check performance benchmarks (if applicable)
+
+## Output Format
+
+Report results in this format:
+
+```
+## Verification Results
+
+### Test Results
+- Unit Tests: PASSED (42/42)
+- Integration Tests: FAILED (8/10)
+  - ❌ test_api_auth: Connection timeout
+  - ❌ test_user_flow: Assertion failed at line 156
+
+### Acceptance Criteria
+- ✓ Criterion 1: Users can log in with OAuth
+- ✓ Criterion 2: Session persists across refreshes
+- ❌ Criterion 3: Rate limiting works (not implemented)
+
+### Quality Checks
+- ✓ Coverage: 87% (threshold: 80%)
+- ✓ Lint: No warnings
+- ✓ Security: No vulnerabilities
+```
+
+## Verification Status
+
+Based on results, conclude with:
+- `VERIFICATION PASSED` - All checks pass
+- `VERIFICATION FAILED` - List all failures for fixing
+
+Execute the verification plan now.

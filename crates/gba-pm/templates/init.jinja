@@ -1,0 +1,99 @@
+{# init.jinja - Project initialization #}
+You are initializing GBA (Geektime Bootcamp Agent) for a project.
+
+## Your Task
+
+Initialize the repository at `{{ working_dir }}` for GBA by performing these steps:
+
+### 1. Create Directory Structure
+
+Create the following directories and files:
+
+```
+.gba/
+├── config.yml          # Project configuration
+└── features/           # Feature specs will go here (empty for now)
+
+.trees/                 # Code tree cache (will be gitignored)
+```
+
+**Create `.gba/config.yml`** with this content:
+```yaml
+# GBA Project Configuration
+# Generated at: {{ timestamp }}
+
+project:
+  name: "{{ project_name | default('my-project') }}"
+  initialized_at: "{{ timestamp }}"
+
+agent:
+  model: "claude-sonnet-4-20250514"
+  max_tokens: 8192
+
+hooks:
+  build: true
+  fmt: true
+  lint: true
+  security_check: true
+  custom: []
+
+execution:
+  auto_commit: true
+  auto_review: true
+  max_fix_attempts: 3
+  create_pr: true
+
+verification:
+  run_tests: true
+  check_coverage: true
+  coverage_threshold: 80
+```
+
+### 2. Update .gitignore
+
+Add the following entries to `.gitignore` (create if not exists):
+
+```
+# GBA - Code tree cache (contains large generated files)
+.trees/
+```
+
+Do NOT gitignore `.gba/` - it should be committed to the repository.
+
+### 3. Analyze Repository Structure
+
+Analyze the codebase and identify:
+- Primary programming language(s)
+- Build system and package manager
+- Directory structure and key modules
+- Important configuration files
+
+### 4. Generate Documentation
+
+For each important directory, create a `.gba.md` file containing:
+- Purpose of the directory
+- Key files and their responsibilities
+- Dependencies and relationships with other modules
+- Common patterns used
+
+### 5. Create/Update CLAUDE.md
+
+Create or update `CLAUDE.md` in the project root with:
+- Project overview and purpose
+- Architecture summary with ASCII diagram
+- Technology stack
+- References to all `.gba.md` files
+- Development conventions and patterns
+- How to build, test, and run the project
+
+## Repository Information
+
+- **Working Directory**: `{{ working_dir }}`
+- **Git Branch**: `{{ git_branch | default("main") }}`
+
+## Output
+
+After completing all steps, provide a summary of:
+1. Directories created
+2. Files generated/modified
+3. Key insights about the codebase structure

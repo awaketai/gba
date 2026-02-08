@@ -1,0 +1,152 @@
+{# create_pr.jinja - Create Pull Request after all phases complete #}
+You are creating a Pull Request for the completed feature `{{ feature_slug }}`.
+
+## Feature Summary
+
+- **Feature**: `{{ feature_slug }}`
+- **Branch**: `{{ branch_name }}`
+- **Base Branch**: `{{ base_branch | default("main") }}`
+
+## Completed Phases
+
+{% for phase in completed_phases %}
+### Phase {{ loop.index }}: {{ phase.name }}
+- **Commit**: `{{ phase.commit }}`
+- **Goal**: {{ phase.goal }}
+- **Deliverables**:
+{% for deliverable in phase.deliverables %}
+  - {{ deliverable }}
+{% endfor %}
+{% endfor %}
+
+## Implementation Details
+
+### Design Spec Summary
+{{ design_summary }}
+
+### Files Changed
+{% for file in changed_files %}
+- `{{ file.path }}` ({{ file.change_type }}: +{{ file.additions }}/-{{ file.deletions }})
+{% endfor %}
+
+**Total**: {{ total_files }} files changed, +{{ total_additions }} insertions, -{{ total_deletions }} deletions
+
+## Verification Results
+
+- **Tests**: {{ verification.tests_passed }}/{{ verification.tests_total }} passed
+- **Coverage**: {{ verification.coverage }}%
+- **Lint**: {{ "Passed" if verification.lint_passed else "Issues found" }}
+- **Security**: {{ "Passed" if verification.security_passed else "Issues found" }}
+
+## Your Task
+
+Create a Pull Request using the `gh` CLI with a comprehensive description.
+
+### 1. Ensure Branch is Pushed
+
+```bash
+git push -u origin {{ branch_name }}
+```
+
+### 2. Create Pull Request
+
+Use `gh pr create` with the following structure:
+
+```bash
+gh pr create \
+  --base {{ base_branch | default("main") }} \
+  --head {{ branch_name }} \
+  --title "{{ pr_title }}" \
+  --body "$(cat <<'EOF'
+## Summary
+
+{{ feature_description }}
+
+## Changes
+
+### What's New
+{% for phase in completed_phases %}
+- **{{ phase.name }}**: {{ phase.summary }}
+{% endfor %}
+
+### Implementation Highlights
+- [Describe key architectural decisions]
+- [Describe any notable patterns used]
+- [Describe any trade-offs made]
+
+## Design
+
+### Architecture
+```
+[Include ASCII diagram if applicable]
+```
+
+### Key Interfaces
+```{{ language }}
+[Include main public interfaces/APIs added]
+```
+
+## Files Changed
+
+<details>
+<summary>{{ total_files }} files changed</summary>
+
+{% for file in changed_files %}
+- `{{ file.path }}`
+{% endfor %}
+
+</details>
+
+## Testing
+
+- [x] Unit tests added/updated
+- [x] Integration tests added/updated
+- [x] All tests passing ({{ verification.tests_passed }}/{{ verification.tests_total }})
+- [x] Code coverage: {{ verification.coverage }}%
+
+## Verification Checklist
+
+- [x] Code compiles without errors
+- [x] Linting passes
+- [x] Security scan passes
+- [x] Documentation updated
+- [x] CHANGELOG updated (if applicable)
+
+## How to Test
+
+1. Checkout this branch: `git checkout {{ branch_name }}`
+2. [Step-by-step testing instructions]
+3. [Expected results]
+
+## Related Issues
+
+{% if related_issues %}
+{% for issue in related_issues %}
+- Closes #{{ issue }}
+{% endfor %}
+{% else %}
+- N/A
+{% endif %}
+
+---
+🤖 Generated with [GBA](https://github.com/xxx/gba) (Geektime Bootcamp Agent)
+EOF
+)"
+```
+
+### 3. Output the PR URL
+
+After creating the PR, output:
+- PR number
+- PR URL
+- Any warnings or notes
+
+## Guidelines
+
+- Make the PR title concise but descriptive (max 72 chars)
+- Ensure the description is comprehensive for reviewers
+- Include testing instructions
+- Link any related issues
+- If the PR is large, consider adding a "How to Review" section
+
+Create the Pull Request now.

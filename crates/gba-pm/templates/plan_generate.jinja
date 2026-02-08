@@ -1,0 +1,103 @@
+{# plan_generate.jinja - Generate spec files from approved design #}
+You are generating specification files for feature `{{ feature_slug }}`.
+
+## Approved Design
+
+### High-Level Design
+{{ design.high_level }}
+
+### Interface Design
+{{ design.interfaces }}
+
+### Data Flow
+{{ design.data_flow }}
+
+### Core Data Structures
+{{ design.data_structures }}
+
+### Development Phases
+{% for phase in design.phases %}
+- Phase {{ loop.index }}: {{ phase.name }}
+  - Goal: {{ phase.goal }}
+  - Tasks: {{ phase.tasks | join(", ") }}
+{% endfor %}
+
+### Verification Plan
+{% for check in design.verifications %}
+- {{ check }}
+{% endfor %}
+
+## Your Task
+
+Generate THREE specification files in the `.gba/features/{{ feature_slug }}/` directory:
+
+### 1. `development_plan.md`
+Structure:
+```markdown
+# Development Plan: {{ feature_slug }}
+
+## Overview
+{Brief description}
+
+## Phases
+### Phase 1: {name}
+**Goal**: {goal}
+**Tasks**:
+- [ ] {task1}
+- [ ] {task2}
+**Dependencies**: {deps or "None"}
+**Deliverables**:
+- {deliverable1}
+
+{Repeat for each phase}
+
+## Dependencies
+- {external deps}
+```
+
+### 2. `design.md`
+Structure:
+```markdown
+# Design Spec: {{ feature_slug }}
+
+## High-Level Design
+{Architecture overview with ASCII diagram}
+
+## Interface Design
+### Public APIs
+{Code blocks with interfaces}
+
+### Internal APIs
+{Internal interfaces}
+
+## Data Flow
+{ASCII diagram}
+
+## Core Data Structures
+{Code blocks}
+
+## Design Decisions
+| Decision | Rationale | Alternatives |
+|----------|-----------|--------------|
+```
+
+### 3. `verification_plan.md`
+Structure:
+```markdown
+# Verification Plan: {{ feature_slug }}
+
+## Test Cases
+### Unit Tests
+- [ ] {test case}
+
+### Integration Tests
+- [ ] {test case}
+
+## Acceptance Criteria
+- [ ] {criterion}
+
+## Quality Checks
+- [ ] {check with threshold}
+```
+
+Generate all three files with complete, actionable content.
