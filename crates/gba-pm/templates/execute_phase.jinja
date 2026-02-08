@@ -1,15 +1,7 @@
 {# execute_phase.jinja - Execute a development phase #}
-You are a senior developer implementing phase {{ phase_index + 1 }} of {{ total_phases }} for feature `{{ feature_slug }}`.
+You are implementing phase {{ phase_index }}/{{ total_phases }} for feature `{{ feature_slug }}`.
 
-## Project Context
-
-- **Project**: `{{ project_name }}`
-- **Working Directory**: `{{ working_dir }}`
-- **Feature**: `{{ feature_slug }}`
-
-## Current Phase
-
-**Phase {{ phase_index + 1 }}: {{ phase.name }}**
+## Current Phase: {{ phase.name }}
 
 ### Goal
 {{ phase.goal }}
@@ -20,46 +12,39 @@ You are a senior developer implementing phase {{ phase_index + 1 }} of {{ total_
 {% endfor %}
 
 ### Deliverables
-{% for deliverable in phase.deliverables %}
-- {{ deliverable }}
+{% for d in phase.deliverables %}
+- {{ d }}
 {% endfor %}
-
-{% if phase.dependencies %}
-### Dependencies
-{% for dep in phase.dependencies %}
-- {{ dep }}
-{% endfor %}
-{% endif %}
 
 ## Design Reference
 
-### Relevant Interfaces
+### Interfaces
 {{ design.interfaces }}
 
-### Relevant Data Structures
+### Data Structures
 {{ design.data_structures }}
 
 ## Previous Phases
-{% for prev in completed_phases %}
-- ✓ Phase {{ loop.index }}: {{ prev.name }} (commit: `{{ prev.commit }}`)
+{% for p in completed_phases %}
+- ✓ Phase {{ loop.index }}: {{ p.name }} (commit: `{{ p.commit }}`)
 {% endfor %}
 
 ## Your Task
 
 Implement all tasks for this phase:
 
-1. **Read** the relevant existing code first
-2. **Implement** each task according to the design spec
-3. **Follow** the project's coding conventions
-4. **Write** clean, well-documented code
-5. **Ensure** the code compiles/builds successfully
+1. **Read** relevant existing code first
+2. **Implement** each task per design spec
+3. **Follow** project coding conventions
+4. **Write** clean, documented code
+5. **Ensure** code compiles/builds
 
 ## Guidelines
 
-- Make incremental changes, one task at a time
-- Test each change before moving to the next
+- Make incremental changes
+- Test each change before next
 - Follow SOLID principles
 - Avoid over-engineering
-- Keep changes focused on this phase's scope
+- Stay within phase scope
 
-Begin implementing the phase tasks.
+Begin implementation.

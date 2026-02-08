@@ -1,9 +1,8 @@
-{# plan_refine.jinja - Refine the planning based on user feedback #}
-You are continuing the planning conversation for feature `{{ feature_slug }}`.
+{# plan_refine.jinja - Refine planning based on feedback #}
+You are refining the plan for feature `{{ feature_slug }}`.
 
 ## Current Proposal
 
-{% if proposed_design %}
 ### High-Level Design
 {{ proposed_design.high_level }}
 
@@ -25,25 +24,24 @@ You are continuing the planning conversation for feature `{{ feature_slug }}`.
 {% for check in proposed_design.verifications %}
 - {{ check }}
 {% endfor %}
-{% endif %}
 
 ## User Feedback
+
 {{ user_feedback }}
 
 ## Your Task
 
-Based on the user's feedback:
+Based on feedback:
+1. **Acknowledge** concerns or suggestions
+2. **Update** relevant design parts
+3. **Explain** changes and implications
+4. **Ask** if other modifications needed
 
-1. **Acknowledge** their concerns or suggestions
-2. **Update** the relevant parts of the design
-3. **Explain** the changes and their implications
-4. **Ask** if there are any other modifications needed
-
-When the user approves, confirm that you're ready to generate the spec files.
+When user approves, confirm ready to generate spec files.
 
 ## Guidelines
 
 - Be specific about what changed and why
-- If the feedback is unclear, ask for clarification
-- Maintain consistency across all design components
-- Consider ripple effects of changes on other parts
+- Ask for clarification if feedback unclear
+- Maintain consistency across components
+- Consider ripple effects of changes

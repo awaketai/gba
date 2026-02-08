@@ -1,28 +1,19 @@
-{# execute_phase_resume.jinja - Resume execution from interruption point #}
-You are resuming development of phase {{ phase_index + 1 }} of {{ total_phases }} for feature `{{ feature_slug }}`.
+{# execute_phase_resume.jinja - Resume from interruption #}
+You are RESUMING phase {{ phase_index }}/{{ total_phases }} for feature `{{ feature_slug }}`.
 
 ## ⚠️ RESUMING FROM INTERRUPTION
 
-The previous execution was interrupted. You need to:
-1. **Assess** what was already completed
-2. **Continue** from where it left off
-3. **Avoid** redoing completed work
+Previous execution was interrupted. You must:
+1. Assess what was completed
+2. Continue from interruption point
+3. Avoid redoing completed work
 
 ## Interruption Context
 
-- **Interrupted At**: {{ interrupted_at }}
-- **Last Action**: {{ last_action | default("Unknown") }}
-- **Turns Completed**: {{ turns_completed }}
+- **Last Action**: {{ last_action }}
+- **Turns Before Interruption**: {{ turns_completed }}
 
-## Project Context
-
-- **Project**: `{{ project_name }}`
-- **Working Directory**: `{{ working_dir }}`
-- **Feature**: `{{ feature_slug }}`
-
-## Current Phase
-
-**Phase {{ phase_index + 1 }}: {{ phase.name }}**
+## Current Phase: {{ phase.name }}
 
 ### Goal
 {{ phase.goal }}
@@ -30,20 +21,10 @@ The previous execution was interrupted. You need to:
 ### Tasks
 {% for task in phase.tasks %}
 {% if task in completed_tasks %}
-- [x] {{ task }} ✓ (completed before interruption)
+- [x] {{ task }} ✓
 {% else %}
 - [ ] {{ task }}
 {% endif %}
-{% endfor %}
-
-### Deliverables
-{% for deliverable in phase.deliverables %}
-- {{ deliverable }}
-{% endfor %}
-
-## Previous Phases
-{% for prev in completed_phases %}
-- ✓ Phase {{ loop.index }}: {{ prev.name }} (commit: `{{ prev.commit }}`)
 {% endfor %}
 
 ## Files Modified Before Interruption
@@ -51,28 +32,32 @@ The previous execution was interrupted. You need to:
 - `{{ file }}`
 {% endfor %}
 
+## Previous Phases
+{% for p in completed_phases %}
+- ✓ Phase {{ loop.index }}: {{ p.name }} (commit: `{{ p.commit }}`)
+{% endfor %}
+
 ## Your Task
 
-1. **First**: Check the current state of the codebase
-   - Read the modified files to understand what's done
-   - Verify which tasks are actually completed
-   - Identify any partial implementations
+1. **First**: Check current codebase state
+   - Read modified files
+   - Verify which tasks are done
+   - Identify partial implementations
 
-2. **Then**: Continue with remaining tasks
-   - Pick up from the last incomplete task
-   - Complete all remaining tasks
-   - Ensure consistency with already-completed work
+2. **Then**: Continue remaining tasks
+   - Pick up from last incomplete task
+   - Complete all remaining work
+   - Ensure consistency
 
-3. **Finally**: Verify the phase is complete
+3. **Finally**: Verify phase complete
    - All tasks implemented
    - Code compiles/builds
-   - Ready for hooks and review
 
 ## Guidelines
 
-- DO NOT repeat work that's already done
-- If a file was partially modified, complete the changes
-- Maintain consistency with existing code style
-- Report if you find any issues from the interrupted session
+- DO NOT repeat completed work
+- Complete partial modifications
+- Maintain code style consistency
+- Report any issues from interrupted session
 
-Begin by assessing the current state, then continue implementation.
+Begin by assessing state, then continue.

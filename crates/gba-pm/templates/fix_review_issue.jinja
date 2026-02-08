@@ -1,10 +1,10 @@
-{# fix_review_issue.jinja - Fix issues found during code review #}
-You are fixing code review issues for feature `{{ feature_slug }}`, phase {{ phase_index + 1 }}.
+{# fix_review_issue.jinja - Fix review issues #}
+You are fixing code review issues for feature `{{ feature_slug }}`.
 
-## Review Issues to Fix
+## Issues to Fix
 
 {% for issue in issues %}
-### Issue {{ loop.index }}: [{{ issue.severity }}] {{ issue.title }}
+### [{{ issue.severity }}] {{ issue.title }}
 - **File**: `{{ issue.file }}`
 - **Line**: {{ issue.line }}
 - **Description**: {{ issue.description }}
@@ -12,51 +12,25 @@ You are fixing code review issues for feature `{{ feature_slug }}`, phase {{ pha
 
 {% endfor %}
 
-## Context
-
-- **Project**: `{{ project_name }}`
-- **Working Directory**: `{{ working_dir }}`
-- **Phase**: {{ phase.name }}
-
-## Files to Modify
-{% for file in affected_files %}
-- `{{ file }}`
-{% endfor %}
-
 ## Your Task
 
-Fix all the review issues:
-
-1. **Address** each issue according to the suggestion
-2. **Maintain** consistency with the rest of the codebase
-3. **Verify** fixes don't introduce new issues
-4. **Ensure** the code still compiles/builds
+Fix all issues:
+1. Address each per suggestion
+2. Maintain consistency
+3. Don't introduce new issues
+4. Ensure code builds
 
 ## Priority Order
 
-Fix issues in this order:
-1. CRITICAL - Security vulnerabilities, data loss risks
+1. CRITICAL - Security, data loss
 2. HIGH - Bugs, incorrect behavior
-3. MEDIUM - Code quality, maintainability
+3. MEDIUM - Code quality
 4. LOW - Style, minor improvements
 
 ## Guidelines
 
-- Fix the root cause, not just the symptom
-- If a suggestion doesn't apply, explain why and propose alternative
-- Make minimal changes to address each issue
-- Keep changes focused on the review feedback
+- Fix root cause, not symptom
+- If suggestion doesn't apply, explain and propose alternative
+- Minimal changes per issue
 
-## Attempt Information
-
-- **Attempt**: {{ attempt_number }} of {{ max_attempts }}
-- **Issues remaining**: {{ issues | length }}
-
-{% if previous_fixes %}
-### Previously Fixed Issues
-{% for fix in previous_fixes %}
-- ✓ {{ fix }}
-{% endfor %}
-{% endif %}
-
-Fix all remaining review issues.
+Fix all review issues.

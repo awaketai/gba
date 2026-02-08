@@ -1,87 +1,43 @@
 {# fix_verification_error.jinja - Fix verification failures #}
 You are fixing verification failures for feature `{{ feature_slug }}`.
 
-## Verification Failures
+## Failures
 
-{% for failure in failures %}
-### Failure {{ loop.index }}: {{ failure.category }}
-- **Check**: {{ failure.check }}
-- **Expected**: {{ failure.expected }}
-- **Actual**: {{ failure.actual }}
-{% if failure.error_message %}
-- **Error**: {{ failure.error_message }}
-{% endif %}
-{% if failure.stack_trace %}
-- **Stack Trace**:
-```
-{{ failure.stack_trace }}
-```
+{% for f in failures %}
+### {{ f.category }}: {{ f.check }}
+- **Expected**: {{ f.expected }}
+- **Actual**: {{ f.actual }}
+{% if f.error %}
+- **Error**: {{ f.error }}
 {% endif %}
 
 {% endfor %}
 
-## Context
-
-- **Project**: `{{ project_name }}`
-- **Working Directory**: `{{ working_dir }}`
-- **Feature**: `{{ feature_slug }}`
-
 ## Completed Phases
-{% for phase in completed_phases %}
-- Phase {{ loop.index }}: {{ phase.name }} (commit: `{{ phase.commit }}`)
+{% for p in completed_phases %}
+- Phase {{ loop.index }}: {{ p.name }} (commit: `{{ p.commit }}`)
 {% endfor %}
 
 ## Your Task
 
-Fix all verification failures:
+Fix all failures:
 
-### 1. Analyze Failures
-- Understand why each check failed
-- Identify the root cause in the code
-
-### 2. Fix Issues
-- For test failures: Fix the code or the test (if test is wrong)
-- For coverage: Add missing tests
-- For acceptance criteria: Implement missing functionality
-- For quality checks: Address the specific issue
-
-### 3. Re-verify
-- Ensure fixes don't break other tests
-- Verify the original issue is resolved
+1. **Analyze** why each check failed
+2. **Fix** the code (or test if test is wrong)
+3. **Re-verify** fixes don't break other tests
 
 ## Guidelines
 
-{% if "test" in failures | map(attribute='category') | list %}
 ### Test Failures
-- Read the test to understand expected behavior
-- Check if the implementation matches the spec
-- Don't just make tests pass - fix the actual bug
-{% endif %}
+- Understand expected behavior
+- Fix implementation, not just make test pass
 
-{% if "coverage" in failures | map(attribute='category') | list %}
 ### Coverage Issues
-- Identify uncovered code paths
-- Write meaningful tests, not just coverage padding
+- Add meaningful tests for uncovered paths
 - Focus on critical paths and edge cases
-{% endif %}
 
-{% if "acceptance" in failures | map(attribute='category') | list %}
 ### Acceptance Criteria
-- Review the original requirement
-- Implement the missing functionality
-- Ensure it integrates with existing code
-{% endif %}
+- Review original requirement
+- Implement missing functionality
 
-## Attempt Information
-
-- **Attempt**: {{ attempt_number }} of {{ max_attempts }}
-- **Failures remaining**: {{ failures | length }}
-
-{% if previous_fixes %}
-### Previously Fixed
-{% for fix in previous_fixes %}
-- ✓ {{ fix }}
-{% endfor %}
-{% endif %}
-
-Fix all verification failures to complete the feature.
+Fix all verification failures.

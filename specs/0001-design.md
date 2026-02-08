@@ -497,14 +497,39 @@ impl PromptManager {
     pub fn list_templates(&self) -> Vec<&str>;
 }
 
-/// 模板上下文
+/// 模板上下文 - 执行引擎自动填充
 pub struct Context { /* ... */ }
 
 impl Context {
     pub fn new() -> Self;
     pub fn insert(&mut self, key: &str, value: impl Serialize);
-    pub fn with(self, key: &str, value: impl Serialize) -> Self;
 }
+
+/// 执行引擎自动提供的上下文变量
+///
+/// | 变量 | 来源 | 说明 |
+/// |------|------|------|
+/// | `feature_slug` | CLI 参数 | 功能标识 |
+/// | `project_name` | config.yml / 目录名 | 项目名称 |
+/// | `timestamp` | 系统时间 | ISO8601 格式 |
+/// | `phase_index` | state.yml | 当前阶段索引 (1-based) |
+/// | `total_phases` | development_plan.md | 总阶段数 |
+/// | `phase` | development_plan.md | 当前阶段详情 |
+/// | `completed_phases` | state.yml | 已完成阶段列表 |
+/// | `design` | design.md | 设计规格 |
+/// | `verification_plan` | verification_plan.md | 验证计划 |
+/// | `verification` | 执行结果 | 验证结果 |
+/// | `modified_files` | git diff | 修改的文件列表 |
+/// | `diff` | git diff | 变更内容 |
+/// | `error_output` | 命令输出 | 错误信息 |
+/// | `issues` | review 结果 | 审查问题 |
+/// | `failures` | verification 结果 | 验证失败项 |
+///
+/// Convention over Configuration:
+/// - 分支名: `feature/{feature_slug}`
+/// - Base 分支: `main`
+/// - 最大重试次数: 3
+/// - 覆盖率阈值: 80%
 
 /// 预定义的 Prompt 类型
 pub enum PromptKind {

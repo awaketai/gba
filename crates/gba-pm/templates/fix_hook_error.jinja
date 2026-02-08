@@ -1,76 +1,34 @@
 {# fix_hook_error.jinja - Fix precommit hook errors #}
-You are fixing precommit hook failures for feature `{{ feature_slug }}`, phase {{ phase_index + 1 }}.
+You are fixing a precommit hook failure for feature `{{ feature_slug }}`.
 
-## Hook Failure Details
+## Hook Failure
 
-**Failed Hook**: `{{ hook_name }}`
-**Exit Code**: {{ exit_code }}
+- **Hook**: `{{ hook_name }}`
+- **Exit Code**: {{ exit_code }}
+- **Attempt**: {{ attempt }}/3
 
 ### Error Output
 ```
 {{ error_output }}
 ```
 
-## Context
-
-- **Project**: `{{ project_name }}`
-- **Working Directory**: `{{ working_dir }}`
-- **Phase**: {{ phase.name }}
-
-## Recent Changes
-
-Files modified in this phase:
+## Files Modified This Phase
 {% for file in modified_files %}
 - `{{ file }}`
 {% endfor %}
 
-## Hook Type Information
-
-{% if hook_name == "build" %}
-This is a **build** failure. Common causes:
-- Syntax errors
-- Missing imports/dependencies
-- Type mismatches
-- Unresolved references
-{% elif hook_name == "fmt" %}
-This is a **formatting** failure. Common causes:
-- Code style violations
-- Incorrect indentation
-- Missing/extra whitespace
-{% elif hook_name == "lint" %}
-This is a **linting** failure. Common causes:
-- Unused variables/imports
-- Potential bugs (clippy warnings)
-- Code quality issues
-{% elif hook_name == "security_check" %}
-This is a **security** failure. Common causes:
-- Hardcoded secrets
-- Unsafe code patterns
-- Vulnerable dependencies
-{% endif %}
-
 ## Your Task
 
-1. **Analyze** the error output carefully
-2. **Identify** the root cause(s)
-3. **Fix** all issues in the affected files
-4. **Verify** the fix resolves the hook failure
+1. **Analyze** error output
+2. **Identify** root cause(s)
+3. **Fix** all issues
+4. **Verify** fix resolves failure
 
 ## Guidelines
 
-- Fix the actual issue, not just suppress the warning
-- Make minimal changes needed to pass the hook
-- Don't introduce new issues while fixing
-- If multiple errors, fix them all
+- Fix the actual issue, don't suppress warnings
+- Make minimal changes to pass hook
+- Don't introduce new issues
+- Fix ALL errors if multiple
 
-## Attempt Information
-
-- **Attempt**: {{ attempt_number }} of {{ max_attempts }}
-{% if previous_fixes %}
-- **Previous fix attempts**:
-{% for fix in previous_fixes %}
-  - {{ fix }}
-{% endfor %}
-{% endif %}
-
-Fix the hook failure and ensure the code passes all checks.
+Fix the hook failure.
