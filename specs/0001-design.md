@@ -533,6 +533,9 @@ impl Context {
 
 /// 预定义的 Prompt 类型
 pub enum PromptKind {
+    // System prompt
+    System,                 // Agent 角色定义和行为准则
+
     // 初始化相关
     Init,                   // 项目初始化，创建 .gba/ .trees/ 目录
 
@@ -557,6 +560,75 @@ pub enum PromptKind {
     // PR 相关
     CreatePr,               // 创建 Pull Request (使用 gh cli)
 }
+
+/// 工具权限配置
+///
+/// 不同场景需要不同的工具权限，这是安全边界：
+/// - ReadOnly: 只读场景（规划探索、代码审查）
+/// - WriteSpecs: 只能写入 .gba/ 目录（生成 spec 文件）
+/// - GitOnly: 仅 git/gh 命令（创建 PR）
+/// - Full: 完整 Claude Code preset（开发执行）
+pub enum ToolProfile {
+    /// 只读工具: Read, Glob, Grep
+    /// 用于: PlanStart, PlanRefine, Review
+    ReadOnly,
+
+    /// 只读 + 写入 .gba/* 目录
+    /// 用于: PlanGenerate
+    WriteSpecs,
+
+    /// 仅 git/gh 命令
+    /// 用于: CreatePr
+    GitOnly,
+
+    /// 完整 Claude Code preset
+    /// 用于: Init, ExecutePhase, ExecutePhaseResume, FixHookError,
+    ///       FixReviewIssue, Verification, FixVerificationError
+    Full,
+}
+
+impl PromptKind {
+    /// 获取该 Prompt 类型对应的工具权限配置
+    pub fn tool_profile(&self) -> ToolProfile {
+        match self {
+            // 只读场景 - 探索代码库，不做修改
+            PromptKind::PlanStart => ToolProfile::ReadOnly,
+            PromptKind::PlanRefine => ToolProfile::ReadOnly,
+            PromptKind::Review => ToolProfile::ReadOnly,
+
+            // 只写 spec 文件
+            PromptKind::PlanGenerate => ToolProfile::WriteSpecs,
+
+            // 只需 git/gh 命令
+            PromptKind::CreatePr => ToolProfile::GitOnly,
+
+            // 需要完整工具集
+            _ => ToolProfile::Full,
+        }
+    }
+}
+
+/// Prompt 角色类型
+///
+/// 定义 prompt 是作为 system prompt 还是 user prompt 提供给 Claude Agent SDK
+pub enum PromptRole {
+    /// System prompt - 定义 agent 角色和行为准则
+    /// 在整个会话期间保持不变
+    System,
+
+    /// User prompt - 包含具体任务指令和动态上下文
+    User,
+}
+
+impl PromptKind {
+    /// 获取该 Prompt 类型的角色
+    pub fn role(&self) -> PromptRole {
+        match self {
+            PromptKind::System => PromptRole::System,
+            _ => PromptRole::User,
+        }
+    }
+}
 ```
 
 **模块结构**:
@@ -566,8 +638,10 @@ gba-pm/
 │   ├── lib.rs              # Public exports
 │   ├── manager.rs          # PromptManager implementation
 │   ├── context.rs          # Context builder
+│   ├── kind.rs             # PromptKind, ToolProfile, PromptRole
 │   └── error.rs            # Error types
 └── templates/              # Prompt templates (English)
+    ├── system.jinja        # System prompt (agent 角色定义)
     ├── init.jinja
     ├── plan_start.jinja
     ├── plan_refine.jinja
