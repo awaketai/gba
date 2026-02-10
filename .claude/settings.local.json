@@ -6,7 +6,16 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor: convert project to workspace structure\n\n- Convert single package to workspace with 3 crates:\n  - crates/gba-core: core execution engine \\(tokio, claude-agent-sdk-rs\\)\n  - crates/gba-pm: prompt manager \\(minijinja\\)\n  - apps/gba-cli: CLI interface \\(clap, ratatui\\)\n- Centralize all dependencies in workspace root Cargo.toml\n- Use typed-builder for builder pattern across crates\n- Add skeleton code structure for each crate\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git worktree:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo +nightly fmt:*)",
+      "Bash(cargo clippy:*)",
+      "Bash(./target/release/gba:*)",
+      "Bash(cargo test:*)",
+      "Bash(cargo fmt:*)",
+      "Bash(find:*)",
+      "Bash(git reset:*)"
     ]
   }
 }
